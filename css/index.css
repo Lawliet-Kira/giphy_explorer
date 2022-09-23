@@ -24,6 +24,10 @@ main {
     align-items: center;
 }
 
+#giphy__search {
+    width: 300px;
+}
+
 /* recent searches */
 .giphy__recent_searches {   
     margin: 5px 20px;
@@ -40,6 +44,7 @@ main {
 
 /* giphy__list_container */
 .giphy__list_container {
+    width: 35%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -50,4 +55,36 @@ main {
     width: 350px;
     margin-bottom: 20px;
     border-radius: 20px;
+}
+
+@media only screen and (max-width: 800px) {
+
+    .giphy__search_container, .giphy__list_container {
+        width: 50%;
+    }
+
+    #giphy__search {
+        width: 240px;
+    }
+    
+}
+
+@media only screen and (max-width: 600px) {
+
+    .giphy__search_container, .giphy__list_container {
+        width: 100%;
+    }
+
+}
+
+@media only screen and (max-width: 400px) {
+
+    .giphy__list_container img {
+        width: 250px;
+    }
+
+    #giphy__search {
+        width: 200px;
+    }
+
 }

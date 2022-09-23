@@ -1,4 +1,5 @@
 import { getobserver } from './observer.js'; 
+import { updateLocalStorage, updateRecentSearches } from './recent_functions.js'
 import { searchForGifs, fetchTrendingGifs } from './api_functions.js';
 
 let offsetTrend = 0, offsetSearch = 0;
@@ -18,14 +19,16 @@ export const fetchMoreTrendingGifs = async () => {
         .then((response) => response.json())
         .then((content) => {
             let data = content?.data;
-            let gifsContainer = document.getElementById('giphy__list_container');
-            let lastImg = data.pop();
-            const lastImgNode = makeImage(lastImg);
-            getobserver(lastImgNode);   
-            const templates = data.map((img) => makeImage(img));
-            gifsContainer.append(...templates);
-            gifsContainer.append(lastImgNode);
-            offsetTrend += 5;
+            if ( data.length > 0 ) {
+                let gifsContainer = document.getElementById('giphy__list_container');
+                let lastImg = data.pop();
+                const lastImgNode = makeImage(lastImg);
+                getobserver(lastImgNode);   
+                const templates = data.map((img) => makeImage(img));
+                gifsContainer.append(...templates);
+                gifsContainer.append(lastImgNode);
+                offsetTrend += 5;
+            }
         })
         .catch(err => console.log("error: ", err));
 
@@ -39,14 +42,16 @@ export const fetchMoreSearchGifs = async () => {
         .then((response) => response.json())
         .then((content) => {
             let data = content?.data;
-            let gifsContainer = document.getElementById('giphy__list_container');
-            let lastImg = data.pop();
-            const lastImgNode = makeImage(lastImg);
-            getobserver(lastImgNode);   
-            const templates = data.map((img) => makeImage(img));
-            gifsContainer.append(...templates);
-            gifsContainer.append(lastImgNode);
-            offsetSearch += 5;
+            if ( data.length > 0 ) {
+                let gifsContainer = document.getElementById('giphy__list_container');
+                let lastImg = data.pop();
+                const lastImgNode = makeImage(lastImg);
+                getobserver(lastImgNode);   
+                const templates = data.map((img) => makeImage(img));
+                gifsContainer.append(...templates);
+                gifsContainer.append(lastImgNode);
+                offsetSearch += 5;
+            }
         })
         .catch(err => console.log("error: ", err));
 
@@ -54,6 +59,7 @@ export const fetchMoreSearchGifs = async () => {
 
 document.addEventListener("DOMContentLoaded", function () {
 
+    /* get the trendings gift onload window */
     fetchTrendingGifs(offsetTrend)
         .then(response => response.json())
         .then((content) => {
@@ -77,6 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("err: ", err);
         });
 
+    /* get recent searches from localStorage */
     (() => { 
 
         let recentSearches = window.localStorage.getItem('recentSearches');
@@ -97,46 +104,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     })();
 
-    const updateLocalStorage = (ListNode) => {
-
-        let arrayPersist = [];
-
-        for (let item of ListNode.children) {
-            arrayPersist.push(item.firstChild.value);
-        }
-
-        // Actualizar el localStorage del navegador
-        window.localStorage.setItem('recentSearches', arrayPersist);
-
-    }
-
-    const updateRecentSearches = ( newSearch ) => {
-
-        let recentSearchesList = document.getElementById('giphy___recent_searches_list');
-
-        if ( recentSearchesList.lastElementChild && Object.values(recentSearchesList.children).length === 3 ) 
-            recentSearchesList.removeChild(recentSearchesList.lastElementChild);
-        
-        let newElemNode = document.createElement('li');
-    
-        newElemNode.classList.add("list-group-item");
-    
-        newElemNode.innerHTML = `<button type="button" value="${newSearch}" class="btn btn-link btn-sm"> ${newSearch} </button>`;
-
-        recentSearchesList.insertBefore(newElemNode, recentSearchesList.firstChild);
-
-        updateLocalStorage(recentSearchesList);
-    
-    }
-
+    /* Logic for searching */
     document.getElementById('giphy__search_form').onsubmit = (e) => {
     
         e.preventDefault();
         offsetSearch = 0;
 
-        let valueForSearch = e.target.elements.giphy__search.value;
+        let valueToSearch = e.target.elements.giphy__search.value;
     
-        searchForGifs(valueForSearch)
+        searchForGifs(valueToSearch)
             .then( response => response.json() )
             .then( (content) => {
 
@@ -156,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     gifsContainer.innerHTML = arrGifsTrend.join(" ");
                     gifsContainer.append(lastImgNode);
 
-                    lastSearch = valueForSearch;
+                    lastSearch = valueToSearch;
                     offsetSearch += 5;
 
                 } else {
@@ -172,10 +148,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log("error: ", err);
             })
 
-        updateRecentSearches(valueForSearch);
+        updateRecentSearches(valueToSearch);
         
     };
 
+    /* Logic for update recent searches */
     document.getElementById('giphy___recent_searches_list').addEventListener('click', (e) => {
 
         if ( e.target && e.target.nodeName == 'BUTTON' ) {
