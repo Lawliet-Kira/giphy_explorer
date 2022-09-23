@@ -10,22 +10,24 @@
 </head>
 <body>
     <main>
-        <h2 class="giphy__title"> Giphy Explorer </h2>
-        <form id="giphy__search_form" class="form-inline giphy__search_form" >
-            <div class="form-group m-3">
-                <input  type="text" id="giphy__search" name="giphy__search" placeholder="Enter your search..." /> 
+        <section class="container giphy__search_container">
+            <h2 class="giphy__title"> Giphy Explorer </h2>
+            <form id="giphy__search_form" class="form-inline giphy__search_form" >
+                <div class="form-group m-3">
+                    <input  type="text" id="giphy__search" name="giphy__search" placeholder="Enter your search..." /> 
+                </div>
+                <button type="submit" class="btn btn-dark btn giphy__btn"> Search </button>
+            </form>
+            <div id="giphy__recent_searches" class="giphy__recent_searches">
+                <h5>recent searches</h5> 
+                <ul id="giphy___recent_searches_list" class="list-group list-group-flush">
+                </ul>
             </div>
-            <button type="submit" class="btn btn-dark btn giphy__btn"> Search </button>
-        </form>
-        <div id="giphy__recent_searches" class="giphy__recent_searches">
-            <h5>recent searches</h5> 
-            <ul id="giphy___recent_searches_list" class="list-group list-group-flush">
-            </ul>
-        </div>
+        </section>
         <div id="giphy__list_container" class="giphy__list_container">            
         </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-    <script src="js/index.js"></script>
+    <script type="module" src="js/index.js"></script>
 </body>
 </html>
